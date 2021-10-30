@@ -8,5 +8,5 @@ This requires client token. This can be concidered self-botting and can get your
 - fork this repo
 - create config
   - look into [config.example.json](https://github.com/c10udburst-discord/discord-announcer/blob/master/config.example.json) to see how it should look
-  - create [new repository secret](/settings/secrets/actions/new) with name `CONFIG`
+  - create [new repository secret](../../settings/secrets/actions/new) with name `CONFIG`
   - paste your config
