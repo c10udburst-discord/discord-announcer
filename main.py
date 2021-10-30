@@ -1,9 +1,9 @@
 import discord
-import config
+from config import Config
 import json
 from send_utils import send_webhook
 
-config = config.Config(json.load(open('config.json', 'r', encoding='utf-8')))
+config = Config(json.load(open('config.json', 'r', encoding='utf-8')))
 
 
 class AnnouncerClient(discord.Client):

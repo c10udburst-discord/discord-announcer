@@ -1,0 +1,31 @@
+name: Run Bot
+
+concurrency: 
+  group: "bot-run"
+  cancel-in-progress: true
+
+on:
+  schedule:
+    - cron: "0 */3 * * *"
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+    - uses: actions/cache@v2
+    - name: Install dependencies
+      run: |
+        python3 -m pip install --upgrade pip
+        pip3 install -r requirements.txt
+    - name: Load config.json
+      run: |
+        cat << EOF > config.json
+        ${{ secrets.CONFIG }}
+        EOF
+    - name: Run Bot
+      run: python3 main.py
