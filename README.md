@@ -5,7 +5,8 @@ Basically [announcement channels](https://support.discord.com/hc/articles/360032
 This requires client token. This can be concidered self-botting and can get your account banned.
 
 ### Setup
-- clone repo
-- optionally create venv
-- install requirements
-- create `config.json` (you can look into config.example.json to see how it is supposed to look)
+- fork this repo
+- create config
+  - look into [config.example.json](https://github.com/c10udburst-discord/discord-announcer/blob/master/config.example.json) to see how it should look
+  - create [new repository secret](/settings/secrets/actions/new) with name `CONFIG`
+  - paste your config
