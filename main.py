@@ -11,6 +11,10 @@ class AnnouncerClient(discord.Client):
         await self.change_presence(status=discord.Status.offline)
 
     async def on_message(self, message: discord.Message):
+        for entry in config.globals:
+            if entry.filter(message):
+                await send_webhook(message, entry.webhook_url, entry)
+
         if message.channel.id not in config.channel_map.keys():
             return
 

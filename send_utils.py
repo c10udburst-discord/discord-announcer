@@ -2,16 +2,16 @@ from discord import Message, Webhook, AsyncWebhookAdapter, AllowedMentions
 import aiohttp
 
 
-async def send_webhook(msg: Message, webhook_url: str, channel_settings):
+async def send_webhook(msg: Message, webhook_url: str, entry_settings):
     async with aiohttp.ClientSession() as session:
         webhook = Webhook.from_url(webhook_url, adapter=AsyncWebhookAdapter(session))
 
-        if channel_settings.show_jump:
+        if entry_settings.show_jump:
             prefix = f"[[jump]](<{msg.jump_url}>)\n"
         else:
             prefix = ""
 
-        if channel_settings.add_channel:
+        if entry_settings.add_channel:
             user_suffix = f" [#{msg.channel.name}]"
         else:
             user_suffix = ""

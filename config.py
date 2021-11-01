@@ -10,7 +10,7 @@ def parse_filter(raw: str) -> str:
     return raw
 
 
-class Channel:
+class Entry:
     def __init__(self, data: Optional[Dict] = None):
         if data is None:
             self.webhook = ""
@@ -20,10 +20,6 @@ class Channel:
             self.filter_src = ""
         else:
             self.webhook = data['webhook']
-            if isinstance(data['id'], list):
-                self.id = [int(i) for i in data['id']]
-            else:
-                self.id = int(data['id'])
             self.show_jump = data.get('show_jump', False)
             self.add_channel = data.get('add_channel', False)
             self.filter_src = parse_filter(data.get('filter', ""))
@@ -40,15 +36,27 @@ class Channel:
         return eval(self.filter_src)
 
 
+class Channel(Entry):
+    def __init__(self, data: Optional[Dict] = None):
+        super().__init__(data)
+        if data is not None:
+            if isinstance(data['id'], list):
+                self.id = [int(i) for i in data['id']]
+            else:
+                self.id = int(data['id'])
+
+
 class Config:
     def __init__(self, data: Optional[Dict] = None):
         if data is None:
             self.token = ""
             self.channels = []
+            self.globals = []
             self.show_jump = True
         else:
             self.token = data['token']
             self.channels = [Channel(c) for c in data.get('channels', [])]
+            self.globals = [Entry(c) for c in data.get('globals', [])]
             self.show_jump = data.get("show_jump", True)
 
         self.channel_map = {}
