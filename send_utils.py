@@ -28,10 +28,26 @@ async def send_webhook(msg: Message, webhook_url: str, channel_settings):
         else:
             attachments = ""
 
+        content = ""
+        try:
+            content = msg.content
+        except AttributeError:
+            pass
+        content = prefix + content + attachments
+        
+        embeds = []
+        try:
+            embeds = msg.embeds
+        except AttributeError:
+            pass
+        
+        if not content and len(embeds)<1:
+            content = f"[[jump]](<{msg.jump_url}>)\n"
+
         # send
         await webhook.send(
-            content=(prefix + msg.content + attachments) or f"[[jump]](<{msg.jump_url}>)\n",
-            embeds=msg.embeds,
+            content=content,
+            embeds=embeds,
             avatar_url=get_avatar(msg.author),
             username=get_username(msg.author) + user_suffix,
             tts=msg.tts,
