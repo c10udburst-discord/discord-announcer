@@ -28,19 +28,18 @@ async def send_webhook(msg: Message, webhook_url: str, channel_settings):
         else:
             attachments = ""
 
+        # parse content and embeds
         content = ""
         try:
             content = msg.content
         except AttributeError:
             pass
         content = prefix + content + attachments
-        
         embeds = []
         try:
             embeds = msg.embeds
         except AttributeError:
             pass
-        
         if not content and len(embeds)<1:
             content = f"[[jump]](<{msg.jump_url}>)\n"
 
