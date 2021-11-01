@@ -61,10 +61,11 @@ def get_username(user) -> str:
         name = user.nick
     except AttributeError:
         pass
-    try:
-        name = user.name
-    except AttributeError:
-        pass
+    if not name:
+        try:
+            name = user.name
+        except AttributeError:
+            pass
     if not name:
         name = "Unknown User"
     return name
@@ -76,10 +77,11 @@ def get_avatar(user) -> str:
         url = user.avatar_url
     except AttributeError:
         pass
-    try:
-        url = user.default_avatar_url
-    except AttributeError:
-        pass
+    if not url:
+        try:
+            url = user.default_avatar_url
+        except AttributeError:
+            pass
     if not url:
         url = "https://discord.com/assets/1f0bfc0865d324c2587920a7d80c609b.png"
     return url
