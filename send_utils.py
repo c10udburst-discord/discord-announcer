@@ -22,18 +22,48 @@ async def send_webhook(msg: Message, webhook_url: str, channel_settings):
             attachments.extend([f"[]({a})" for a in msg.attachments])
             attachments.extend([f"[]({s.image_url_as(256)})" for s in msg.stickers])
         except (AttributeError, KeyError, IndexError) as e:
-            print(e)
+            pass
         if attachments:
-            attachments = "\n".join(attachments)
+            attachments = " " + " ".join(attachments)
         else:
             attachments = ""
 
         # send
         await webhook.send(
-            content=(prefix + msg.content + attachments) or ".",
+            content=(prefix + msg.content + attachments) or f"[[jump]](<{msg.jump_url}>)\n",
             embeds=msg.embeds,
-            avatar_url=msg.author.avatar_url or msg.author.default_avatar_url,
-            username=(msg.author.nick or msg.author.name) + user_suffix,
+            avatar_url=get_avatar(msg.author),
+            username=get_username(msg.author) + user_suffix,
             tts=msg.tts,
             allowed_mentions=AllowedMentions.none()
         )
+
+
+def get_username(user) -> str:
+    name = ""
+    try:
+        name = user.nick
+    except AttributeError:
+        pass
+    try:
+        name = user.name
+    except AttributeError:
+        pass
+    if not name:
+        name = "Unknown User"
+    return name
+
+
+def get_avatar(user) -> str:
+    url = ""
+    try:
+        url = user.avatar_url
+    except AttributeError:
+        pass
+    try:
+        url = user.default_avatar_url
+    except AttributeError:
+        pass
+    if not url:
+        url = "https://discord.com/assets/1f0bfc0865d324c2587920a7d80c609b.png"
+    return url
