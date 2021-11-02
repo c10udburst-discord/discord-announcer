@@ -7,6 +7,7 @@ def parse_filter(raw: str) -> str:
     raw = raw.replace("is_bot", "msg.author.bot")
     raw = raw.replace("is_webhook", "(msg.webhook_id is not None)")
     raw = raw.replace("has_embed", "(len(msg.embeds)>0)")
+    raw = raw.replace("has_attachment", "(len(msg.attachments)>0)")
     return raw
 
 
