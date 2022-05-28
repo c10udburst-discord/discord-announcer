@@ -1,4 +1,4 @@
-## discord-announcer
+## Discord Announcer
 
 Basically [announcement channels](https://support.discord.com/hc/articles/360032008192-), but for any text channel.
 
