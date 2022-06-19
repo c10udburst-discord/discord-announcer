@@ -1,0 +1,42 @@
+name: Run bot
+
+on:
+  schedule:
+    # Uncomment this to run on schedule
+    #- cron: "0 */4 * * *"
+  workflow_dispatch:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+          architecture: 'x64'
+      - name: Install requirements
+        run: |
+          python3 -m pip install --upgrade pip setuptools wheel
+          python3 -m pip install -r requirements.txt
+      - name: Fetch config
+        run: |
+          wget -O config.json "$URL" > /dev/null 2>&1 
+        env:
+          URL: ${{ secrets.CONFIG_URL }}
+      - name: random sleep
+        if: github.event_name == 'schedule'
+        run: sleep $(shuf -i 10-30 -n 1)
+      - name: Run Bot
+        run: |
+          python3 --version
+          python3 main.py
+      - name: Push to repo
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add history.json
+          git commit -m "chore: Update history.json" || exit 0   # do not error if nothing to commit
+          git push
