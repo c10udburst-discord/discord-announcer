@@ -1,4 +1,5 @@
 {
+  "$schema": "https://raw.githubusercontent.com/c10udburst-discord/discord-announcer/master/config.schema.json",
   "token": "ODkyJBWjjjQjWuRWrPLPXLOm.uQlfr4.jXLXPuRlmml.J8rJQB8QJfXjOlEQ",
   "channels": [
     {
@@ -9,6 +10,14 @@
     {
       "id": ["841706525949539575","839843336686944941"],
       "webhook": "https://canary.discord.com/api/webhooks/892448186651474367/z2j0REpmXO-jWEjmXPjVjZXm0pZ2mumKCl2yJ2ZwFBLfljZu6_BjLZEQl8ZumjXJfwr",
+      "add_channel": true,
+      "show_jump": true
+    }
+  ],
+  "globals": [
+    {
+      "filter": "False",
+      "webhook": "809391333435315854/rXaahXXcZxZ-QlEXjXQrXOWlmrujPLlE2OmK4jlLnuuufuR2XV_W8mmBmPmJrEjruLBJ",
       "add_channel": true,
       "show_jump": true
     }

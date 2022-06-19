@@ -36,6 +36,11 @@ class Entry:
             return True
         return eval(self.filter_src)
 
+    def __iter__(self):
+        yield 'show_jump', self.show_jump
+        yield 'add_channel', self.add_channel
+        yield 'webhook_url', self.webhook_url
+
 
 class Channel(Entry):
     def __init__(self, data: Optional[Dict] = None):

@@ -1,19 +1,46 @@
-import discord
-from config import Config
+import asyncio
 import json
+from os.path import isfile
+
+import discord
+
+from config import Config
 from send_utils import send_webhook
 
-config = Config(json.load(open('config.json', 'r', encoding='utf-8')))
+config = Config(json.load(open("config.json", "r")))
+history = {} if not isfile("history.json") else json.load(open("history.json", 'r'))
 
 
 class AnnouncerClient(discord.Client):
+    async def channel_history(self, channel_id):
+        history.setdefault(channel_id, 0)
+        last_timestamp = history[channel_id]
+        channel = self.get_channel(channel_id)
+        channel_config = config.channel_map[channel_id]
+
+        async for msg in channel.history(limit=200):
+            timestamp = discord.utils.snowflake_time(msg.id).timestamp()
+            if timestamp <= last_timestamp:
+                continue
+            if not channel_config.filter(msg):
+                continue
+
+            await send_webhook(msg, channel_config.webhook_url, **channel_config)
+            history[channel_id] = max(history[channel_id], timestamp)
+
+        if history[channel_id] == 0:  # remove if default
+            del history[channel_id]
+
     async def on_ready(self):
         await self.change_presence(status=discord.Status.offline)
+
+        # check history of all channels in config.json
+        await asyncio.gather(*[self.channel_history(i) for i in config.channel_map.keys()])
 
     async def on_message(self, message: discord.Message):
         for entry in config.globals:
             if entry.filter(message):
-                await send_webhook(message, entry.webhook_url, entry)
+                await send_webhook(message, entry.webhook_url, **entry)
 
         if message.channel.id not in config.channel_map.keys():
             return
@@ -22,8 +49,13 @@ class AnnouncerClient(discord.Client):
         if not channel.filter(message):
             return
 
-        await send_webhook(message, channel.webhook_url, channel)
+        await send_webhook(message, channel.webhook_url, **channel)
 
 
 client = AnnouncerClient()
-client.run(config.token)
+try:
+    client.run(config.token)
+except BaseException as ex:
+    print(ex)
+with open("./history.json", "w+") as fp:
+    json.dump(history, fp)

@@ -1,0 +1,112 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "#/definitions/Config",
+    "definitions": {
+        "Config": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "channels": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Channel"
+                    }
+                },
+                "globals": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Global"
+                    }
+                }
+            },
+            "required": ["token"],
+            "title": "Config"
+        },
+        "Channel": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "id": {
+                    "$ref": "#/definitions/ID"
+                },
+                "webhook": {
+                    "type": "string",
+                    "examples": [
+                        "https://canary.discord.com/api/webhooks/892448186651474367/z2j0REpmXO-jWEjmXPjVjZXm0pZ2mumKCl2yJ2ZwFBLfljZu6_BjLZEQl8ZumjXJfwr",
+                        "809391333435315854/rXaahXXcZxZ-QlEXjXQrXOWlmrujPLlE2OmK4jlLnuuufuR2XV_W8mmBmPmJrEjruLBJ"
+                    ]
+                },
+                "filter": {
+                    "$ref": "#/definitions/Filter"
+                },
+                "add_channel": {
+                    "type": "boolean",
+                    "description": "Wether or not to show original channel name in message"
+                },
+                "show_jump": {
+                    "type": "boolean",
+                    "description": "Wether or not to show link to original message"
+                }
+            },
+            "required": [
+                "webhook",
+                "id"
+            ],
+            "title": "Channel"
+        },
+        "Global": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "filter": {
+                    "$ref": "#/definitions/Filter"
+                },
+                "webhook": {
+                    "type": "string",
+                    "examples": [
+                        "https://canary.discord.com/api/webhooks/892448186651474367/z2j0REpmXO-jWEjmXPjVjZXm0pZ2mumKCl2yJ2ZwFBLfljZu6_BjLZEQl8ZumjXJfwr",
+                        "809391333435315854/rXaahXXcZxZ-QlEXjXQrXOWlmrujPLlE2OmK4jlLnuuufuR2XV_W8mmBmPmJrEjruLBJ"
+                    ]
+                },
+                "add_channel": {
+                    "type": "boolean",
+                    "description": "Wether or not to show original channel name in message"
+                },
+                "show_jump": {
+                    "type": "boolean",
+                    "description": "Wether or not to show link to original message"
+                }
+            },
+            "required": [
+                "filter",
+                "webhook"
+            ],
+            "title": "Global"
+        },
+        "ID": {
+            "anyOf": [
+                {
+                    "type": "array",
+                    "items": {"anyOf": [
+                        { "type": "string" },
+                        { "type": "integer" }
+                    ]}
+                },
+                { "type": "string" },
+                { "type": "integer" }
+            ],
+            "title": "IDs"
+        },
+        "Filter": {
+            "type": "string",
+            "description": "Python snippet used to filter messages",
+            "examples": [
+                "is_bot and (not is_webhook) and has_embed",
+                "msg.content.startswith('bruh')"
+            ]
+        }
+    }
+}
