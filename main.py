@@ -18,14 +18,14 @@ class AnnouncerClient(discord.Client):
         channel = self.get_channel(channel_id)
         channel_config = config.channel_map[channel_id]
 
-        async for msg in channel.history(limit=200):
+        async for msg in channel.history(limit=10):
             timestamp = discord.utils.snowflake_time(msg.id).timestamp()
             if timestamp <= last_timestamp:
                 continue
             if not channel_config.filter(msg):
                 continue
 
-            await send_webhook(msg, channel_config.webhook_url, **channel_config)
+            await send_webhook(msg, **dict(channel_config))
             history[channel_id] = max(history[channel_id], timestamp)
 
         if history[channel_id] == 0:  # remove if default
@@ -40,7 +40,7 @@ class AnnouncerClient(discord.Client):
     async def on_message(self, message: discord.Message):
         for entry in config.globals:
             if entry.filter(message):
-                await send_webhook(message, entry.webhook_url, **entry)
+                await send_webhook(message, **dict(entry))
 
         if message.channel.id not in config.channel_map.keys():
             return
@@ -49,7 +49,7 @@ class AnnouncerClient(discord.Client):
         if not channel.filter(message):
             return
 
-        await send_webhook(message, channel.webhook_url, **channel)
+        await send_webhook(message, **dict(channel))
 
 
 client = AnnouncerClient()
