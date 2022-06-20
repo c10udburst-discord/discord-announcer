@@ -58,4 +58,5 @@ try:
 except BaseException as ex:
     print(ex)
 with open("./history.json", "w+") as fp:
+    history = {k:v+1 for k,v in history.items()}  # add +1 to all timestamps (this removes duplicates
     json.dump(history, fp)
