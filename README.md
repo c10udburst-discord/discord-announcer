@@ -1,12 +1,13 @@
-> **Warning**
-
-> Use [Discord Favourites](https://discord.com/channels/@favorites) instead.
 
 # Discord Announcer
 
+> **Note**
+> Consider using [Discord Favourites](https://discord.com/channels/@favorites) instead.
+
 Basically [announcement channels](https://support.discord.com/hc/articles/360032008192-), but for any text channel.
 
-<sub>This requires client token. This can be concidered self-botting and can get your account banned.</sub>
+> **Warning**
+> This requires client token. This can be concidered self-botting and can get your account banned.</sub>
 
 <details>
   <summary>Installation</summary>
